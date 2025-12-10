@@ -259,7 +259,38 @@ SELECT * FROM dbo.frwPermissions WHERE PERMISSION_OBJECT = 'PPM_LedgerTable';
 
 ---
 
-## 12. Rollback & Cleanup Templates
+## 12. JSON verification procedures (NEW — recommended)
+Purpose: return one machine‑readable JSON result after create/move/copy operations so automation can gate subsequent steps.
+
+- dbo.frwAI_VerifyCreateModule_JSON(@ModuleName)  
+  - Returns JSON: ModuleName, OBJECTCAT_ID, ModuleExists, WebMenuParentCount, WebMenuParentRows, WebMenuRows
+
+- dbo.frwAI_VerifyMoveObject_JSON(@ObjectName, @ExpectedTargetObjectCatID)  
+  - Returns JSON: InputName, ShortObject, Found, ObjectName, OBJECTCAT_ID, OBJECTCAT_Sort, WebMenuParent, WebMenu, DefinitionsCount, ReportsCount, PermissionsCount, IsInExpectedModule
+
+- dbo.frwAI_VerifyCopyObject_JSON(@TargetValue, @TargetName, @SourceName)  
+  - Returns JSON: TargetValue, TargetName, SourceName, ObjectExists, ViewExists, DefinitionsCount, ReportsCount, PermissionsCount, ValidationsCount, RestrictionsCount, ExceptionsCount, TutorialsCount, ObjectsCollectionCount, DefinitionsSample (array), ReportsSample (array), PermissionsSample (array)
+
+Use the verify procs immediately after frwAI_CopyObject Step A and Step B. Example:
+```
+EXEC dbo.frwAI_VerifyCopyObject_JSON @TargetValue='PPM_LedgerTable', @TargetName='PPM - Chart of Accounts', @SourceName='Chart of Accounts';
+```
+Parse the returned JSON and require ObjectExists = 1 and ViewExists = 1 (and expected counts) before proceeding.
+
+---
+
+## 13. Best-match helper (NEW)
+- dbo.frwAI_FindBestObjectMatch_JSON(@UserInput,@Top)  
+  - Returns a JSON array of best candidate objects for ambiguous names using heuristics (exact match, prefix, contains, SOUNDEX, length proximity). Each item includes Object_Name, ShortObject, OBJECTCAT_ID, OBJECTCAT_NAME, Score.
+  - Example usage:
+```
+EXEC dbo.frwAI_FindBestObjectMatch_JSON @UserInput = N'Direct Sales', @Top = 10;
+```
+- Use this when the user provides an ambiguous object name; show top results to the operator or let automation pick the top-scored match.
+
+---
+
+## 14. Rollback & Cleanup Templates
 - Undo a copy (example `PPM_LedgerTable`):
 ```
 BEGIN TRAN;
@@ -275,7 +306,7 @@ DELETE FROM dbo.frwObjects WHERE Object_Name = 'PPM - Chart of Accounts' OR [OBJ
 DROP VIEW IF EXISTS dbo.PPM_LedgerTable;
 COMMIT;
 ```
-- Undo a move + rename (capture prior values in preview):
+- Undo a move + rename:
 ```
 BEGIN TRAN;
 EXEC dbo.frwAI_MoveObject @ObjectName = N'PPM - Employees Full File', @TargetObjectCatID = <original_OBJECTCAT_ID>, @MenuName = N'<original menu>', @SetWebMenu = 1, @SetWebMenuParent = 1;
@@ -285,18 +316,18 @@ COMMIT;
 
 ---
 
-## 13. Troubleshooting Flow
-- If `frwAI_CopyObject` fails:
+## 15. Troubleshooting Flow
+- If frwAI_CopyObject fails:
   - Re-run Step A (`@CopySubrMetadata = 0`) to isolate view/object creation.
-  - Inspect proc resultset for per-subsystem errors and counters.
-  - Ensure `frwWebMenuParent`/`frwWebMenu` exist; create if needed.
+  - Inspect the verify proc JSON for per-subsystem counts and samples.
+  - Ensure frwWebMenuParent/frwWebMenu exist; create if needed.
   - Check executing account privileges; consider `@InteractiveGrant = 1`.
-  - For ID generation, consider `sp_getapplock` or sequences if concurrency is high.
-- If you modified stored procs or have site-specific overrides, review their definitions (`sys.sql_modules`) and adapt scripts.
+  - For ID generation, consider `sp_getapplock` or SEQUENCE objects for concurrency.
+- If stored procs have been modified, inspect sys.sql_modules and adapt.
 
 ---
 
-## 14. Concurrency & ID Generation
+## 16. Concurrency & ID Generation
 - `ISNULL(MAX(col),0)+1` is acceptable for low-concurrency admin tasks.
 - In concurrent environments use:
   - `sp_getapplock` around MAX+1 logic, or
@@ -305,14 +336,14 @@ COMMIT;
 
 ---
 
-## 15. Inputs I Expect from the User Before Acting
+## 17. Inputs I Expect from the User Before Acting
 - Create module: ModuleName, CaptionEn, optional CaptionAr, Category, IconClass/Icon binary, confirm menu creation.
 - Move object: ObjectName (exact), TargetObjectCatID, whether to set WebMenuParent/WebMenu, MenuName/MenuIcon, confirm preview.
 - Copy object: SourceName (Object_Name or [OBJECT]), TargetName (display), TargetValue (internal short name), Target module (OBJECTCAT_ID), CopySubrMetadata (1/0), CreateTargetViewIfNotExists (1/0), GrantUser, confirm preview.
 
 ---
 
-## 16. Site-specific Audit: Changes Performed Today
+## 18. Site-specific Audit: Changes Performed Today
 - Module `PPM`: `OBJECTCAT_ID = 1389`, GUID `d60dea45-4630-4c2b-b2ab-fc29052370c9`.
 - Employees:
   - Source: `Object_Name = 'Employees Full File'`, `OBJECT = 'HrEmpTable'`, `OBJECTCAT_ID = 600`, GUID `9a4d627b-...`
@@ -323,7 +354,7 @@ COMMIT;
 
 ---
 
-## 17. How I Will Behave Next Time
+## 19. How I Will Behave Next Time
 - Initialize connection, inspect schema, run preview SELECTs and show results for user confirmation.
 - Use `frwAI_*` procedures for standard operations unless user requests custom behavior.
 - For custom flows produce commented SQL for review and only run after explicit confirmation.
@@ -331,24 +362,26 @@ COMMIT;
 
 ---
 
-## 18. Deliverables Available
-- Markdown file (this document).
-- PDF (if requested).
-- Site-specific rollback script for the PPM changes (I can produce now).
-- GUID mapping report (old GUID → new GUID) for the Chart of Accounts copy and detailed list of frwDefinitions copied (on request).
+## 20. Lessons learned (added)
+- Ensure CREATE/ALTER is first statement in a batch (use CREATE OR ALTER in its own call).  
+- Use JSON verify procs to return single machine‑readable summaries for automation gating.  
+- Preserve GUID mapping during copy operations and expose mapping in verify output.  
+- Use proper concurrency patterns (sp_getapplock / SEQUENCE) in production.  
+- Always wrap DML in transactions and keep rollback templates handy.
 
 ---
 
-## 19. Contact / Safety Note
+## 21. Deliverables Available
+- Markdown file (this document).
+- PDF (if requested).
+- Site-specific rollback script for the PPM changes.
+- GUID mapping report for Chart of Accounts copy and list of frwDefinitions copied.
+
+---
+
+## 22. Contact / Safety Note
 - Do not share clear-text credentials or secrets.
 - Backup or snapshot the DB before running large or irreversible changes in production.
 
----
 
-If you want, I can:
-- Export this to PDF and provide it, or
-- Attach the Markdown file for download, or
-- Produce the site-specific rollback script now, or
-- Produce a GUID mapping report for the Chart of Accounts copy.
 
-Which should I do next?
