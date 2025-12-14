@@ -362,11 +362,298 @@ Maintain these docs as quick references.
 8. When starting a new session, I should read the operational note (frwAI_Documentation)
    
 
----
+##19. 
 
-If you want I will:
-- (A) Save this file and provide it for download.  
-- (B) Produce a one-page printable quick checklist extracted from this playbook.  
-- (C) Generate runnable SQL templates (CreateModule / CopyObject step A & B / MoveObject) with placeholders and inline safety checks.
 
-Which option do you want next?
+
+
+═══════════════════════════════════════════════════════════════════════════════
+OBJECT CREATION PROCEDURES
+═══════════════════════════════════════════════════════════════════════════════
+
+frwAI_CreateObject
+──────────────────────────────────────────────────────────────────────────────
+
+PURPOSE:
+Automates complete creation of a VisualBase framework object including all 
+required table entries, permissions, and menu configuration.
+
+PARAMETERS:
+┌────────────────────┬────────────────┬──────────┬─────────────────────────────┐
+│ Parameter          │ Type           │ Required │ Default                     │
+├────────────────────┼────────────────┼──────────┼─────────────────────────────┤
+│ @ObjectTable       │ NVARCHAR(100)  │ YES      │ -                           │
+│ @ObjectNameEN      │ NVARCHAR(200)  │ YES      │ -                           │
+│ @ObjectNameAR      │ NVARCHAR(200)  │ YES      │ -                           │
+│ @ModuleID          │ INT            │ YES      │ -                           │
+│ @Icon              │ NVARCHAR(100)  │ NO       │ 'fa fa-file'                │
+│ @CopyPermissionsFrom│ NVARCHAR(200) │ NO       │ NULL                        │
+│ @DefaultUser       │ NVARCHAR(100)  │ NO       │ 'VisualBase'                │
+└────────────────────┴────────────────┴──────────┴─────────────────────────────┘
+
+WHAT IT CREATES:
+• frwWebMenu        - Menu entry with EN/AR names and icon
+• frwObjects        - Object config (Status=Released, Show/Add/Edit/Delete/Print=1)
+• frwTabs           - Default tab: "1.General.عام"
+• frwDefinitions    - One per table column with auto-detected control types
+• frwGroupPermissions - Copied or default (Admin group)
+• frwWebPermissions - Copied + DefaultUser guaranteed
+• frwPermissions    - Auto-refreshed for DefaultUser
+
+CONTROL TYPE AUTO-DETECTION:
+• int, bigint, decimal, numeric, float, money  →  TextBox
+• datetime, datetime2, smalldatetime           →  DateTimePicker
+• date                                         →  DateGregorian
+• bit                                          →  CheckBox
+• uniqueidentifier                             →  Label
+• varchar, nvarchar, text                      →  TextBox
+
+USAGE EXAMPLES:
+
+Basic (with defaults):
+    -- Step 1: Create table first
+    CREATE TABLE dbo.MyNewTable (
+        ID INT IDENTITY(1,1) PRIMARY KEY,
+        Name NVARCHAR(200),
+        Status NVARCHAR(50),
+        CreatedDate DATETIME DEFAULT GETDATE(),
+        GUID UNIQUEIDENTIFIER DEFAULT NEWID()
+    )
+
+    -- Step 2: Create object
+    EXEC dbo.frwAI_CreateObject 
+        @ObjectTable = 'MyNewTable',
+        @ObjectNameEN = 'My New Object',
+        @ObjectNameAR = N'الكائن الجديد',
+        @ModuleID = 1401
+
+With custom icon and copied permissions:
+    EXEC dbo.frwAI_CreateObject 
+        @ObjectTable = 'VIPVisitorsRequest',
+        @ObjectNameEN = 'VIP Visitors Request',
+        @ObjectNameAR = N'طلب زيارة كبار الشخصيات',
+        @ModuleID = 1401,
+        @Icon = 'fa fa-star',
+        @CopyPermissionsFrom = 'Visitors (Basic Information)'
+
+RESPONSE FORMAT:
+
+Success:
+    {
+      "status": "SUCCESS",
+      "message": "Object created & permissions refreshed",
+      "objectTable": "VIPVisitorsRequest",
+      "objectName": "VIP Visitors Request",
+      "webMenuID": 436,
+      "defaultUser": "VisualBase",
+      "permissionsRefreshed": true
+    }
+
+Error:
+    {
+      "status": "ERROR",
+      "message": "Table does not exist. Create table first."
+    }
+
+PRE-VALIDATION CHECKS:
+1. All required parameters provided
+2. Object doesn't already exist in frwObjects
+3. Database table exists
+4. ModuleID exists in frwWebMenuParent
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+frwAI_VerifyCreateObject_JSON
+──────────────────────────────────────────────────────────────────────────────
+
+PURPOSE:
+Validates an existing object configuration and returns JSON report with issues.
+Use after creating objects or to diagnose visibility problems.
+
+PARAMETERS:
+┌────────────────────┬────────────────┬──────────┬─────────────────────────────┐
+│ Parameter          │ Type           │ Required │ Description                 │
+├────────────────────┼────────────────┼──────────┼─────────────────────────────┤
+│ @ObjectTable       │ NVARCHAR(100)  │ YES      │ Database table name         │
+└────────────────────┴────────────────┴──────────┴─────────────────────────────┘
+
+WHAT IT CHECKS:
+┌─────────────────────┬─────────────────────────────────┬──────────┐
+│ Category            │ Check                           │ Severity │
+├─────────────────────┼─────────────────────────────────┼──────────┤
+│ frwObjects          │ Status = 'Released'             │ CRITICAL │
+│                     │ Show = 1                        │ CRITICAL │
+│                     │ Add = 1                         │ CRITICAL │
+│                     │ Edit = 1                        │ CRITICAL │
+│                     │ Delete = 1                      │ CRITICAL │
+│                     │ Print = 1                       │ HIGH     │
+│                     │ OBJECTCAT_Sort not NULL         │ HIGH     │
+│                     │ Object_NameAR not NULL          │ HIGH     │
+│                     │ OriginalTable not NULL          │ MEDIUM   │
+├─────────────────────┼─────────────────────────────────┼──────────┤
+│ frwTabs             │ At least one tab exists         │ CRITICAL │
+│                     │ All tabs in definitions exist   │ CRITICAL │
+├─────────────────────┼─────────────────────────────────┼──────────┤
+│ frwDefinitions      │ RighToLeftLanguage set          │ HIGH     │
+├─────────────────────┼─────────────────────────────────┼──────────┤
+│ frwGroupPermissions │ At least one entry exists       │ CRITICAL │
+├─────────────────────┼─────────────────────────────────┼──────────┤
+│ frwWebPermissions   │ At least one entry exists       │ HIGH     │
+├─────────────────────┼─────────────────────────────────┼──────────┤
+│ frwWebMenu          │ MenuAR not NULL                 │ HIGH     │
+├─────────────────────┼─────────────────────────────────┼──────────┤
+│ frwValidations      │ Compare not NULL                │ HIGH     │
+│                     │ ArabicTitle not NULL            │ HIGH     │
+└─────────────────────┴─────────────────────────────────┴──────────┘
+
+USAGE:
+    EXEC dbo.frwAI_VerifyCreateObject_JSON @ObjectTable = 'VIPVisitorsRequest'
+
+RESPONSE FORMAT:
+
+PASSED (no issues):
+    {
+      "summary": {
+        "objectName": "VIP Visitors Request",
+        "objectTable": "VIPVisitorsRequest",
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "total": 0,
+        "status": "PASSED"
+      },
+      "issues": []
+    }
+
+FAILED (critical issues):
+    {
+      "summary": {
+        "objectName": "Visit Request",
+        "objectTable": "VisitRequest",
+        "critical": 4,
+        "high": 1,
+        "medium": 0,
+        "total": 5,
+        "status": "FAILED"
+      },
+      "issues": [
+        {
+          "Category": "frwObjects",
+          "Item": "Show",
+          "Issue": "Show is disabled",
+          "Severity": "CRITICAL",
+          "CurrentValue": "0",
+          "ExpectedValue": "1"
+        }
+      ]
+    }
+
+STATUS MEANINGS:
+• PASSED   - No issues, object ready to use
+• WARNINGS - Has HIGH/MEDIUM issues, may work but needs attention
+• FAILED   - Has CRITICAL issues, object won't function correctly
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+WORKFLOW: CREATE & VERIFY
+──────────────────────────────────────────────────────────────────────────────
+
+-- 1. Create table
+CREATE TABLE dbo.NewVisitorType (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    TypeName NVARCHAR(100),
+    TypeNameAR NVARCHAR(100),
+    IsActive BIT DEFAULT 1,
+    GUID UNIQUEIDENTIFIER DEFAULT NEWID()
+)
+
+-- 2. Create object
+EXEC dbo.frwAI_CreateObject 
+    @ObjectTable = 'NewVisitorType',
+    @ObjectNameEN = 'Visitor Types',
+    @ObjectNameAR = N'أنواع الزوار',
+    @ModuleID = 1401,
+    @Icon = 'fa fa-tags'
+
+-- 3. Verify
+EXEC dbo.frwAI_VerifyCreateObject_JSON @ObjectTable = 'NewVisitorType'
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+TROUBLESHOOTING
+──────────────────────────────────────────────────────────────────────────────
+
+OBJECT NOT VISIBLE IN MENU:
+    Cause: frwPermissions table not refreshed
+    Fix:
+        DECLARE @UserGUID UNIQUEIDENTIFIER
+        SELECT @UserGUID = [GUID] FROM dbo.frwUsers WHERE USER_NAME = 'VisualBase'
+        EXEC dbo.frwWeb_InsertPermissions @GUID = @UserGUID
+
+PERMISSION OBJECT NAMING:
+    IMPORTANT: Use Object_Name (display name), NOT table name!
+    
+    CORRECT: 'VIP Visitors Request'
+    WRONG:   'VIPVisitorsRequest'
+
+FIELD FORMAT IN frwDefinitions:
+    IMPORTANT: Field column must use TableName.FieldName format!
+    
+    CORRECT: 'Visitors.Status'
+    WRONG:   'Status'
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+QUICK REFERENCE QUERIES
+──────────────────────────────────────────────────────────────────────────────
+
+-- List available modules
+SELECT OBJECTCAT_ID, OBJECTCAT_NAME FROM dbo.frwWebMenuParent ORDER BY OBJECTCAT_ID
+
+-- Check if object exists
+SELECT * FROM dbo.frwObjects WHERE [OBJECT] = 'TableName'
+
+-- Check user permissions (definition)
+SELECT * FROM dbo.frwWebPermissions WHERE PERMISSION_USERNAME = 'VisualBase'
+
+-- Check user permissions (runtime)
+SELECT * FROM dbo.frwPermissions WHERE PERMISSION_USERNAME = 'VisualBase'
+
+-- Get user GUID for refresh
+SELECT USER_NAME, [GUID] FROM dbo.frwUsers WHERE USER_NAME = 'VisualBase'
+
+-- Refresh user permissions
+DECLARE @g UNIQUEIDENTIFIER
+SELECT @g = [GUID] FROM dbo.frwUsers WHERE USER_NAME = 'VisualBase'
+EXEC dbo.frwWeb_InsertPermissions @GUID = @g
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PERMISSIONS ARCHITECTURE
+──────────────────────────────────────────────────────────────────────────────
+
+TWO-TABLE SYSTEM:
+
+    ┌─────────────────────┐
+    │  frwWebPermissions  │  DEFINITION (what user SHOULD have)
+    └──────────┬──────────┘
+               │
+               │  REFRESH REQUIRED (frwWeb_InsertPermissions)
+               ▼
+    ┌─────────────────────┐
+    │   frwPermissions    │  RUNTIME (what app READS)
+    └─────────────────────┘
+
+PERMISSION_ACCESS VALUES:
+    1 = Show (View)
+    2 = Add (Create)
+    3 = Edit (Modify)
+    4 = Delete
+    5 = Print
+    6 = ExportData
+
