@@ -362,7 +362,7 @@ Maintain these docs as quick references.
 8. When starting a new session, I should read the operational note (frwAI_Documentation)
    
 
-##19. 
+##19. After this line find the updates and consider it cearlflly 
 
 
 
