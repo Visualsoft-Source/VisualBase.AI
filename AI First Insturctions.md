@@ -1,7 +1,4 @@
 (VisualBase)
-Here’s the **full version as plain text**, ready to copy and paste:
-
-***
 
 AI OPERATIONAL PROTOCOL (STRICT MODE)
 
