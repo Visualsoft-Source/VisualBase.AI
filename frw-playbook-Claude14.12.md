@@ -657,3 +657,92 @@ PERMISSION_ACCESS VALUES:
     5 = Print
     6 = ExportData
 
+
+
+    ## ⚠️ CRITICAL LESSON
+    frwAI_CreateObject creates BASIC definitions only! You MUST manually configure field definitions afterward.
+
+    ## WHAT frwAI_CreateObject DOES:
+    ✅ Creates frwObjects entry
+    ✅ Creates frwWebMenu entry
+    ✅ Creates frwPermissions for default user (VisualBase)
+    ✅ Creates BASIC frwDefinitions (all fields in one tab, no Arabic, TabIndex=0)
+    ✅ Creates ONE generic frwTabs entry (1.General.عام)
+
+    ## WHAT YOU MUST DO AFTER:
+    ❌ frwAI_CreateObject does NOT properly configure:
+    - Multiple tabs (only creates 1.General.عام)
+    - Arabic translations (RighToLeftLanguage is column name, not Arabic)
+    - Proper TabIndex ordering (all are 0)
+    - System fields visibility (not hidden)
+    - Mandatory field markers
+    - Proper control types for numeric/memo fields
+
+    ## COMPLETE POST-CREATION WORKFLOW:
+
+    ### Step 1: ADD ADDITIONAL TABS
+    INSERT INTO frwTabs ([Object], TabName, HasMandatory, GUID)
+    VALUES 
+        ('ObjectName', N'2.Tab Name.اسم التبويب', 0, NEWID()),
+        ('ObjectName', N'3.Another Tab.تبويب آخر', 0, NEWID())
+
+    ### Step 2: UPDATE FIELD DEFINITIONS
+    For EACH visible field:
+    UPDATE frwDefinitions SET 
+        Caption = 'English Caption',
+        RighToLeftLanguage = N'التسمية بالعربي',
+        TabName = N'1.Tab Name.اسم التبويب',
+        TabIndex = 1,
+        Mandatory = 1,
+        Control = 'ControlType'
+    WHERE Field = 'TableName.FieldName'
+
+    ### Step 3: HIDE SYSTEM FIELDS
+    UPDATE frwDefinitions SET 
+        WebInvisible = 1,
+        Invisible = 1,
+        TabIndex = 99
+    WHERE Field IN (
+        'TableName.GUID',
+        'TableName.CreatedDate',
+        'TableName.CreatedUser',
+        'TableName.ModifiedDate',
+        'TableName.ModifiedUser'
+    )
+
+    ## TAB NAMING FORMAT
+    Format: [Order].[English Name].[Arabic Name]
+    Examples:
+    - 1.General.عام
+    - 2.Contact Information.معلومات الاتصال
+    - 3.Payment.الدفع
+    - 4.Notes.ملاحظات
+
+    ## COMMON CONTROL TYPES
+    | Use Case        | Control Type    |
+    |-----------------|-----------------|
+    | Text input      | TextBox         |
+    | Numbers/Amount  | NumericBox      |
+    | Multi-line text | MemoBox         |
+    | Date only       | DateGregorian   |
+    | Date and time   | DateTimePicker  |
+    | Yes/No          | CheckBox        |
+    | Dropdown        | ComboBox        |
+    | Display only    | Label           |
+
+    ⚠️ WARNING: NumericUpDown does NOT exist! Use NumericBox instead.
+
+    ## SYSTEM FIELDS TO ALWAYS HIDE
+    - GUID
+    - CreatedDate
+    - CreatedUser
+    - ModifiedDate
+    - ModifiedUser
+
+    ## VERIFICATION
+    After all steps, run:
+    EXEC frwAI_VerifyCreateObject_JSON @ObjectTable = 'TableName'
+
+    Version: 1.0 | Created: 2025-12-14 | Source: Member Subscriptions creation session
+
+
