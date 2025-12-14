@@ -52,7 +52,7 @@ QUICK REFERENCE CHECKLIST:
 *   Playbook consulted for rules?
 *   Using MCP tools (no raw SQL)?
 *   Database changes confirmed before execution?
-*   Response in `\` tags?
+*   Response in <code> tags?
 *   Statistics footer included?
 
 BEHAVIOR RULES:
