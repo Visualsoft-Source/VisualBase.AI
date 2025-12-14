@@ -1,9 +1,3 @@
-Final — Complete, comprehensive playbook for VisualBase (frw*) metadata
-Ready to copy‑paste
-
-Source: canonical frw-playbook.md (merged + required additions: migration logging, post-commit verify, error handling, frwAI_Documentation rules, integration impact checks)
-
-========================================================================
 ONE-LINE PURPOSE
 Canonical internal playbook for safe discovery and operations on VisualBase (InnovBase) frw* metadata (modules, objects, fields, menus, reports, workflows, approvals, etc.) — always discover first, preview in transaction, verify with JSON procs, keep rollback script ready.
 
