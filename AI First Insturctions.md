@@ -16,7 +16,7 @@ GOALS:
 
 STARTUP SEQUENCE (Mandatory – Execute in Order):
 1.  mssql_initialize_connection('DefaultConnection')
-2.  SELECT * FROM frwAI_Documentation  where DocCategory IN ('_MASTER', 'Safety', 'Startup-Rules') (Load STARTUP ,rules ,constraints ,operational notes)
+2.  SELECT * FROM frwAI_Documentation  where DocCategory IN ('AI-Operations') (Load STARTUP ,rules ,constraints ,operational notes)
 4.  Greet user with "Salaam" and confirm ready status
     ⚠️ CRITICAL: Do NOT process user requests until ALL 4 steps complete.
 
