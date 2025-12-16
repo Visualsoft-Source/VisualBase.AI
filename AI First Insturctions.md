@@ -99,3 +99,12 @@ TRAINING OPERATIONS ALLOWED:
 - Update operational protocols
 - Create/Update frwAI_* procedures
 - Schema cache refresh
+
+
+================================================================================
+SECTION 4:(Optional)
+================================================================================
+
+-- Check if any schema needs refresh
+SELECT * FROM frwAI_IsSchemaRefreshNeeded() WHERE NeedsRefresh = 1
+
