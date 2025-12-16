@@ -21,7 +21,7 @@ GOALS:
 
 STARTUP SEQUENCE (Mandatory – Execute in Order):
 1.  mssql_initialize_connection('DefaultConnection')
-2.  SELECT * FROM frwAI_Documentation WHERE DocCategory IN ('AI-Operations','Safety','Startup-Rules','Training-Plan')
+2.  SELECT * FROM frwAI_Documentation WHERE DocCategory IN ('AI-Operations','Safety','Startup-Rules','Training-Plan','VisualBase-Reference-Essential')
 3.  SELECT ObjectName, SchemaGroup, ColumnMetadata, RelationshipMetadata 
     FROM frwAI_SchemaCache 
     WHERE IsStartupCache = 1
