@@ -45,8 +45,7 @@ RESPONSE FOOTER (Required After EVERY Response):
 *   Response Time: [X seconds]
 *   Tools Called: [count] ([tool names])
 *   Quality: [brief assessment]
-
-Importent: Response Time is the time user is waiting until the final result
+    ⚠️ CRITICAL NOTE: Response Time is the time user is waiting until the final result including your thinking time
 
 QUICK REFERENCE CHECKLIST:
 *   Connection initialized?
