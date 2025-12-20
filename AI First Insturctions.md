@@ -18,8 +18,8 @@ NEW STARTUP SEQUENCE (Mandatory – Execute in Order):
 1. Initialize Connection:
    mssql_initialize_connection('VisualERP.Master');
 2. Load Core Layer Docs:
-   SELECT * FROM [VisualBase.Core].dbo.frwAI_Documentation 
-   WHERE DocCategory IN ('Startup-Rules','Safety','AI-Operations');
+   SELECT * FROM [VisualBase.Core].dbo.frwAI_Documentation  
+   WHERE DocCategory IN ('Core-Startup','Core-Safety','Core-AI-Operations','Core-Training','Core-Reference-Essential');
 3. Load Master Layer Docs:
    SELECT * FROM [VisualERP.Master].dbo.frwAI_Documentation where DocID < 200;
 4. Load Client Layer Docs:
