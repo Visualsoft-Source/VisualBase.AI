@@ -101,7 +101,7 @@ Exception: Admins may see all logs when explicitly requested.
 • frwAI_Documentation loaded?
 • Using MCP tools (no raw SQL)?
 • Database changes confirmed before execution?
-• Response in ''tags?
+• Response in <result> tags?
 • Statistics footer included?
 
 ✅ Training Summary (TRAINER role only) including:
