@@ -182,8 +182,6 @@ When NEW learning found:
 
 ***
 
-Do you want me to **save this as a `.txt` file for download** or keep it here for copy-paste?
-
 
 
 
