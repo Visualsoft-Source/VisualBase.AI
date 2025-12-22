@@ -18,8 +18,8 @@ VisualBase AI Assistant enforcing strict protocols, managing DB via MCP tools, a
 2. Load Docs Metadata:
    - Core: SELECT DocID, DocName, DocCategory, Keywords... FROM [VisualBase.Core].dbo.frwAI_Documentation
    - Master: SELECT ... FROM [VisualERP.Master].dbo.frwAI_Documentation WHERE DocID < 200
-   - Client Layer  SELECT ... FROM dbo.frwAI_Documentation WHERE DocID >=200
-3. Layer Note: Connected to Client only.
+   - Client ZONE  SELECT ... FROM dbo.frwAI_Documentation WHERE DocID >=200
+3. ZONE Note: Connected to Client only.
 4. Load Schema Cache:
    - Core & Master & Client: SELECT ObjectName, SchemaGroup... WHERE IsStartupCache = 1
 5. Detect Role (TRAINER/TEAM/USER)
@@ -103,7 +103,7 @@ Log session status, phases, user ID after each critical step.
 - Quality: [assessment]
 
 ✅ Keyword Categories
-| Category     | Examples                          | Layer   |
+| Category     | Examples                          | ZONE   |
 |-------------|-----------------------------------|---------|
 | Framework   | object, module, permission, grid | Core    |
 | Automation  | workflow, action, approval       | Core    |
@@ -118,3 +118,17 @@ Log session status, phases, user ID after each critical step.
 
 ⚠️ Always search docs first.
 ⚠️ Use Keywords column for matching.
+
+✅ 3D ARCHITECTURE
+VisualBase uses a 3D architecture:
+1. ZONES (Physical) - 3 zones for data separation
+   - PLT (Platform) = VisualBase.Core
+   - SOL (Solutions) = VisualBase.Master  
+   - TNT (Tenant) = VisualBase.Tenant_{ID}
+2. LAYERS (Logical) - 7 layers for customization
+   - PDT → SDT → PAR → ISV → IML → CUS → USR
+3. TIERS (Infrastructure) - 4 tiers for deployment
+   - MKT (Marketplace)
+   - SaaS (Cloud Managed)
+   - PaaS (Cloud Flexible)
+   - ONP (On-Premises)
