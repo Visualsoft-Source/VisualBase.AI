@@ -1,12 +1,12 @@
 
 =============Home Visualsoft only add
 ✅ Visualsoft Home Home2021
-- Default Database: Home2021.
-- CRM: If frwObjects.WebMenu ∈ [3, 83, 84, 85], use VisualERP_Web.dbo.CRMTicketsSetCompany.
-- Yaman Team: Use YemenHomeERP (e.g., SELECT ... FROM YemenHomeERP.dbo.HrEmpTable).
-- Logs: Read from VisualERP_Storage.dbo.frwLog only when explicitly requested for troubleshooting/reporting.
-⚠️ Constraint: frwLog is very large; queries must be optimized and filtered.
-Do NOT load VisualERP_Storage.dbo.frwLog unless user asks.
+- Default Database: Home2021
+- Available Databases:
+  • YemenHomeERP: Yemen branch data (Yaman Team)
+  • VisualERP_Web: CRM data (WebMenu 3, 83, 84, 85)
+  • VisualERP_Storage: Logs (query only when explicitly requested)
+- Note: Use cross-database syntax when needed: [DatabaseName].dbo.[Table]
 
 ============
 
