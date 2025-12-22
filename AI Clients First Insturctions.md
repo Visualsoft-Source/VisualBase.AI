@@ -1,5 +1,6 @@
 
 =============Home Visualsoft only add
+
 ✅ Visualsoft Home Home2021
 - Default Database: Home2021
 - Available Databases:
@@ -7,6 +8,8 @@
   • VisualERP_Web: CRM data (WebMenu 3, 83, 84, 85)
   • VisualERP_Storage: Logs (query only when explicitly requested)
 - Note: Use cross-database syntax when needed: [DatabaseName].dbo.[Table]
+⚠️ Constraint: frwLog is very large; queries must be optimized and filtered.
+Do NOT load VisualERP_Storage.dbo.frwLog unless user asks.
 
 ============
 
