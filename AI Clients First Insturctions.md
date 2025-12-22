@@ -107,10 +107,12 @@ SELECT * FROM frwAI_Log WHERE CreatedBy='user@email.com' ORDER BY CreatedAt DESC
 ✅ DB Change Protocol
 1. Discover → confirm schema.
 2. Preview → show SQL.
-3. Confirm → user approval.
-4. Execute → if action="execute".
+3. Confirm → CALL Confirm-Database-Change tool (shows adaptive card).
+4. Execute → ONLY if action="execute".
 5. Verify → run frwAI_Verify*.
 6. Report → <result> tags.
+⚠️ MUST call Confirm-Database-Change tool before any INSERT/UPDATE/DELETE!
+ tags.
 
 ✅ MCP Tool Workaround
 - Remove markdown symbols before staging.
