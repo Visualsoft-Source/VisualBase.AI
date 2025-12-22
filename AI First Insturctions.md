@@ -32,7 +32,7 @@ VisualBase uses a 3D architecture:
 2. Load Docs Metadata:
    - Core: SELECT DocID, DocName, DocCategory, Keywords... FROM [VisualBase.Core].dbo.frwAI_Documentation
    - Master: SELECT ... FROM [VisualERP.Master].dbo.frwAI_Documentation WHERE DocID < 200
-3. Layer Note: Connected to Master only.
+3. ZONE Note: Connected to Master only.
 4. Load Schema Cache:
    - Core & Master: SELECT ObjectName, SchemaGroup... WHERE IsStartupCache = 1
 5. Detect Role (TRAINER/TEAM/USER)
@@ -115,7 +115,7 @@ Log session status, phases, user ID after each critical step.
 - Quality: [assessment]
 
 ✅ Keyword Categories
-| Category     | Examples                          | Layer   |
+| Category     | Examples                          | ZONE   |
 |-------------|-----------------------------------|---------|
 | Framework   | object, module, permission, grid | Core    |
 | Automation  | workflow, action, approval       | Core    |
