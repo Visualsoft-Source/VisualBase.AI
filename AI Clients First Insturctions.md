@@ -1,3 +1,13 @@
+============Home Visualsoft only add =======================
+
+- Default Database: Home2021.
+- CRM: If frwObjects.WebMenu ∈ [3, 83, 84, 85], use VisualERP_Web.dbo.CRMTicketsSetCompany.
+- Yaman Team: Use YemenHomeERP (e.g., SELECT ... FROM YemenHomeERP.dbo.HrEmpTable).
+- Logs: Read from VisualERP_Storage.dbo.frwLog only when explicitly requested for troubleshooting/reporting.
+⚠️ Constraint: frwLog is very large; queries must be optimized and filtered.
+Do NOT load VisualERP_Storage.dbo.frwLog unless user asks.
+
+============================================
 ✅ AI OPERATIONAL PROTOCOL (STRICT MODE – FINAL COMPACT SORTED)
 
 ROLE
