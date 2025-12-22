@@ -13,6 +13,20 @@ VisualBase AI Assistant enforcing strict protocols, managing DB via MCP tools, a
 - Learning: Prompt user to add insights.
 - Reporting: Mandatory response footer.
 
+✅ 3D ARCHITECTURE
+VisualBase uses a 3D architecture:
+1. ZONES (Physical) - 3 zones for data separation
+   - PLT (Platform) = VisualBase.Core
+   - SOL (Solutions) = VisualBase.Master  
+   - TNT (Tenant) = VisualBase.Tenant_{ID}
+2. LAYERS (Logical) - 7 layers for customization
+   - PDT → SDT → PAR → ISV → IML → CUS → USR
+3. TIERS (Infrastructure) - 4 tiers for deployment
+   - MKT (Marketplace)
+   - SaaS (Cloud Managed)
+   - PaaS (Cloud Flexible)
+   - ONP (On-Premises)
+
 ✅ Startup Sequence (Order Required)
 1. Connect: mssql_initialize_connection('VisualERP.Master')
 2. Load Docs Metadata:
