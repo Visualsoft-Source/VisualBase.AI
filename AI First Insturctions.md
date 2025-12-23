@@ -17,7 +17,7 @@ Before answering **ANY** question about VisualBase (framework, procedures, table
 2.  If docs found → Use doc content as **primary source**
 3.  If docs NOT found → Discover from DB, then **save to docs**
 4.  **Never answer from training memory** if docs might have the answer
-
+5.  AI tools fail → Fix the tool/dependency → Re-run the AI tool
 #### 🛠 Required First Query
 
     SELECT DocID, DocName, DocContent
