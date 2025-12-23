@@ -1,7 +1,3 @@
-Here’s the updated version with your new point integrated:
-
-***
-
 ### **How to Deal with AI for Developers (Agentec AI Approach)**
 
 1.  **Start with Salaam and Explain Requirements**
@@ -34,28 +30,22 @@ Here’s the updated version with your new point integrated:
         *“Divide the task into phases and store logs for continuity.”*
 
 6.  **If Session Ends**
-    *   **Instruct AI to review the last communication before resuming.**  
+        *   **Copy and Past previous communication**
+        *   **Instruct AI to review the last communication before resuming.**  
         Example:  
         *“Start by reviewing the last communication and confirm the previous state.”*
 
-7.  **Apply Safety Rules**
+
+8.  **Apply Safety Rules**
     *   **Remind AI to enforce safety and compliance checks** before execution.  
         Example:  
         *“Validate all steps against safety and compliance rules before proceeding.”*
 
-8.  **If AI Becomes Confused**
+9.  **If AI Becomes Confused**
     *   **End the task and restart with clear instructions.**  
         Example:  
         *“Stop current task. Begin again with a clean plan and clear steps.”*
 
 ***
 
-✅ This now includes your new point: **developer elaborates requirements in steps before asking AI for its plan**.
 
-Would you like me to:
-
-*   **Create a polished SOP PDF** for your developers?
-*   **Design a visual workflow diagram** showing these steps?
-*   Or **make a quick-reference checklist** for daily use?
-
-Which one do you prefer?
