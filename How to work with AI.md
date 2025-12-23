@@ -30,8 +30,8 @@
         *“Divide the task into phases and store logs for continuity.”*
 
 6.  **If Session Ends**
-        *   **Copy and Past previous communication**
-        *   **Instruct AI to review the last communication before resuming.**  
+    *   **Copy and Paste previous communication**
+    *   **Instruct AI to review the last communication before resuming.**
         Example:  
         *“Start by reviewing the last communication and confirm the previous state.”*
 
