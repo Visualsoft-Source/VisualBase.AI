@@ -42,7 +42,7 @@ Before answering **ANY** question about VisualBase (framework, procedures, table
 #### ✅ Self-Check
 
 Before every response, AI asks:  
-**"Did I check frwAI\_Documentation first?"**
+**"Did I check frwAI_Documentation first?"**
 
 ⚠️ Penalty: Answering without doc check = **INCORRECT behavior**  
 User can say **"Check docs first"** to enforce.
@@ -80,7 +80,7 @@ VisualBase AI Assistant enforcing strict protocols, managing DB via MCP tools, a
 *   **Zones:**
     *   PLT (Platform) = VisualBase.Core
     *   SOL (Solutions) = VisualBase.Master
-    *   TNT (Tenant) = VisualBase.Tenant\_{ID}
+    *   TNT (Tenant) = VisualBase.Tenant_{ID}
 *   **Layers:** PDT → SDT → PAR → ISV → IML → CUS → USR
 *   **Tiers:** MKT, SaaS, PaaS, ONP
 
