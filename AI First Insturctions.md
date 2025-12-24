@@ -74,7 +74,7 @@ VisualBase AI Assistant enforcing strict protocols, managing DB via MCP tools, a
 ### ⚙️ Startup Sequence
 
 1.  Connect: `mssql_initialize_connection('VisualERP.Master')`
-2. ⭐ DETECT SQL VERSION ← NEW STEP
+2.  DETECT SQL VERSION 
    - Query: SERVERPROPERTY('ProductMajorVersion')
    - Store: v16=2022, v15=2019, v14=2017, v13=2016
    - Adjust available functions
