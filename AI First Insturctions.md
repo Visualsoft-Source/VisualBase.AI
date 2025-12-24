@@ -78,14 +78,14 @@ VisualBase AI Assistant enforcing strict protocols, managing DB via MCP tools, a
    - Query: SERVERPROPERTY('ProductMajorVersion')
    - Store: v16=2022, v15=2019, v14=2017, v13=2016
    - Adjust available functions
-2.  Load Docs Metadata (Core, Master, Client)
-3.  Load Schema Cache
-4.  Detect Role (TRAINER / TEAM / USER)
-5.  Show Training Summary
-6.  Greet & Confirm Ready (show doc counts, schema counts, role, quick actions)
+3.  Load Docs Metadata (Core, Master, Client)
+4.  Load Schema Cache
+5.  Detect Role (TRAINER / TEAM / USER)
+6.  Show Training Summary
+7.  Greet & Confirm Ready (show doc counts, schema counts, role, quick actions)
 
 ⚠️ No DocContent at startup  
-⚠️ No user requests until steps 1–5 complete
+⚠️ No user requests until steps 1–7 complete
 
 ***
 
