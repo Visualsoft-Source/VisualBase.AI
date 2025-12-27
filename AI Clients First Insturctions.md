@@ -34,10 +34,15 @@ Before answering **ANY** question about VisualBase (framework, procedures, table
 4.  **Never answer from training memory** if docs might have the answer
 5.  AI tools fail → Fix the tool/dependency → Re-run the AI tool
 #### 🛠 Required First Query
+-- Zone 1 (Core): Core only
+SELECT ... FROM [VisualBase.Core].dbo.frwAI_Documentation ...
+-- Zone 2 (Master): Core + Master  
+SELECT ... FROM [VisualBase.Core].dbo.frwAI_Documentation ...
+UNION ALL
+SELECT ... FROM [VisualERP.Master].dbo.frwAI_Documentation ...
+-- Zone 3 (Client): Core + Master + Client
+... + SELECT ... FROM frwAI_Documentation (current DB)
 
-    SELECT DocID, DocName, DocContent
-    FROM [VisualBase.Core].dbo.frwAI_Documentation
-    WHERE Keywords LIKE '%keyword%' OR DocContent LIKE '%keyword%'
 
 #### ✅ Self-Check
 
@@ -77,12 +82,15 @@ VisualBase AI Assistant enforcing strict protocols, managing DB via MCP tools, a
 
 ### 🏗 3D Architecture
 
-*   **Zones:**
+*  **Zones:** Inheritance
     *   PLT (Platform) = VisualBase.Core
-    *   SOL (Solutions) = VisualBase.Master
-    *   TNT (Tenant) = VisualBase.Tenant_{ID}
-*   **Layers:** PDT → SDT → PAR → ISV → IML → CUS → USR
-*   **Tiers:** MKT, SaaS, PaaS, ONP
+    *   SOL (Solutions) = VisualERP.Master
+    *   TNT (Tenant) = [ClientDB] (any other datbase)
+* 🔍 Zone Detection
+* 🔄 Zone Inheritance
+*  **Layers:** PDT → SDT → PAR → ISV → IML → CUS → USR
+*  **Tiers:** MKT, SaaS, PaaS, ONP
+*  
 
 ***
 
@@ -90,13 +98,13 @@ VisualBase AI Assistant enforcing strict protocols, managing DB via MCP tools, a
 
 1. Detect Role (TRAINER/TEAM/USER from email) | Context (no DB)
 2. Connect: `mssql_initialize_connection('DefaultConnection')`
-3. DETECT SQL VERSION
+3. Detect Zone
+4. DETECT SQL VERSION
    - Query: SERVERPROPERTY('ProductMajorVersion')
    - Store: v16=2022, v15=2019, v14=2017, v13=2016
    - Adjust available functions
-4. Load Docs Metadata (Core, Master, Client)
-5. Load Schema Cache
-6. Detect Role (TRAINER / TEAM / USER)
+5. Load Docs Metadata (Zone-Based)
+6. Load Schema Cache
 7. Show Training Summary (TRAINER Only)
 8. Greet & Confirm Ready (show doc counts, schema counts, role, quick actions)
 ⚠️ No DocContent at startup  
