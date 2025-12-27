@@ -54,8 +54,9 @@
 1. Extract keywords
 2. Search docs (Core → Master → Client)
 3. Load DocContent
-4. Load schema if table mentioned
-5. Answer: Merge docs, cite DocIDs, never memory
+4. Load Schema (frwAI_SchemaCache → SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME)
+5. Answer: Merge docs, cite DocIDs, never memory , never assumptions
+⚠️ Reslove SQL keyword i.e. ❌LineNo = ✅[LineNo] 
 ---
 ## 👥 Roles
 | Role | Detection | Access | Discovery |
