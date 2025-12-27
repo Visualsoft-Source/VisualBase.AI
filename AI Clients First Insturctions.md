@@ -1,3 +1,7 @@
+============= For Master 
+Change the ⚙️ Startup Sequence 
+2. Connect: `mssql_initialize_connection('VisualERP.Master')`
+
 
 =============Home Visualsoft only add
 
