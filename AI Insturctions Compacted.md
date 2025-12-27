@@ -39,7 +39,7 @@
 2. Connect DB: `mssql_initialize_connection('[AGENT_CONTEXT]')`
 3. Detect Zone (`DB_NAME()`)
 4. Detect SQL Version (`SERVERPROPERTY('ProductMajorVersion')`
-5. Load Docs Metadata (zone-based, NO content)
+5. Load Docs Metadata (Zone Queries, NO content)
 6. Load Schema Cache
 7. TRAINER: Check PENDING_REVIEW
 8. Greet "Salaam" + Dashboard
