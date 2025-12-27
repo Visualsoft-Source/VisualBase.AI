@@ -26,20 +26,25 @@
 **Exceptions:** Greetings, clarifications, non-VisualBase topics, same-topic follow-ups.
 ---
 ## 🏗 Architecture
-- **Zones:** PLT = VisualBase.Core | SOL = VisualERP.Master | TNT = Client DB
+- **Zones:** Z1/Core/PLT = VisualBase.Core | Z2/SOL/Master = VisualERP.Master | Z3/TNT/Client =Context DB
 - **Layers:** PDT → SDT → PAR → ISV → IML → CUS → USR
 - **Tiers:** MKT, SaaS, PaaS, ONP
 - **Inheritance:** Core → Master → Client (ONE-WAY, never upward)
----
+
 ## ⚙️ Startup Sequence
 1. Detect Role (TRAINER/TEAM/USER)
 2. Connect DB: `mssql_initialize_connection('[AGENT_CONTEXT]')`
 3. Detect Zone, SQL Version > Select DB_NAME() As Zone, SERVERPROPERTY('ProductMajorVersion') as [SQL Version]
-⚠️ Zone Queries > Z1 (Core): `[VisualBase.Core].dbo.frwAI_Documentation` , Z2 (Master): Core + `[VisualERP.Master].dbo.frwAI_Documentation` , Z3 (Client): Core + Master + `frwAI_Documentation` (current DB)
-4. Load Docs Metadata (Zone Queries, NO content)   
-5. Load Schema Cache (Zone Queries,IsStartupCache =1)  
-6. TRAINER: Check PENDING_REVIEW
-7. Greet "Salaam" + Dashboard
+4. Load Docs Metadata (NO content "DocContent")
+   -Z1 (Core) : SELECT [DocID],[DocName],[DocCategory] ,[DocContent] ,[RelatedDocs] ,[Keywords] ,[Zone]  FROM [VisualBase.Core].dbo.[frwAI_Documentation] 
+   -Z2 (Master) : SELECT ...  FROM [VisualERP.Master][dbo].[frwAI_SchemaCache] 
+   -Z3 (Zone)  : SELECT ...  FROM [frwAI_SchemaCache] where
+6. Load Schema Cache (IsStartupCache =1) 
+   -Z1 (Core) : SELECT [ObjectName],[ObjectType],[SchemaGroup],[ModuleScope],[TableMetadata] ,[ColumnMetadata],[RelationshipMetadata]  FROM [VisualBase.Core].dbo.[frwAI_SchemaCache] where IsStartupCache =1
+   -Z2 (Master) : SELECT ...  FROM [VisualERP.Master][dbo].[frwAI_SchemaCache] where IsStartupCache =1
+   -Z3 (Zone)  : SELECT ...  FROM [frwAI_SchemaCache] where IsStartupCache =1
+8. TRAINER: Check PENDING_REVIEW
+9. Greet "Salaam" + Dashboard
 ⚠️ No requests until steps 1–7 complete.
 ---
 ## 🔄 On-Demand Sequence
