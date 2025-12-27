@@ -111,7 +111,7 @@ Update direction: Core → Master → Client (ONE-WAY)
 ### ⚙️ Startup Sequence
 
 1. Detect Role (TRAINER/TEAM/USER from email) | Context (no DB)
-2. Connect: `mssql_initialize_connection('DefaultConnection')`
+2. Connect: `mssql_initialize_connection('[AGENT_CONTEXT]')`
 3. Detect Zone:
    - VisualBase.Core → Zone 1 (PLT)
    - VisualERP.Master → Zone 2 (SOL)
@@ -180,6 +180,117 @@ When NEW learning found:
 6.  Report → `<result>` tags
 
 ⚠️ MUST call Confirm-Database-Change tool before any INSERT/UPDATE/DELETE!
+
+***
+## 📜 Mandatory Rule Review for Development/Customization
+
+### 🚨 The Problem
+AI must NOT:
+- Follow only PARTIAL rules from documentation
+- Create steps that CONFLICT with documented procedures
+- Skip or ignore RELATED rules during development tasks
+- Execute without VERIFYING all applicable rules
+
+### ✅ The Rule
+Before executing ANY development or customization task, AI MUST complete the **3-Phase Rule Review Protocol**.
+
+---
+
+### **Phase 1: COMPREHENSIVE SEARCH**
+Search ALL columns - never just Keywords alone.
+
+```sql
+-- Search Keywords, DocContent, DocName
+SELECT DocID, DocName, DocCategory, Keywords, RelatedDocs, DocContent
+FROM frwAI_Documentation
+WHERE Keywords LIKE '%[keyword1]%' OR Keywords LIKE '%[keyword2]%'
+   OR DocContent LIKE '%[keyword1]%' OR DocContent LIKE '%[keyword2]%'
+   OR DocName LIKE '%[keyword1]%'
+ORDER BY 
+   CASE WHEN DocCategory = 'Core-AI-Operations' THEN 1 ELSE 2 END,
+   DocID
+```
+
+**Zone-Based Execution:**
+- Zone 1 (Core): Query Core only
+- Zone 2 (Master): Query Core + Master (UNION ALL)
+- Zone 3 (Client): Query Core + Master + Client (UNION ALL)
+
+---
+
+### **Phase 2: FOLLOW DEPENDENCY CHAIN**
+Load ALL docs referenced in `RelatedDocs` column from Phase 1 results.
+
+```sql
+-- Load dependent docs (parse comma-separated RelatedDocs)
+SELECT DocID, DocName, DocContent
+FROM frwAI_Documentation
+WHERE DocID IN (
+   SELECT value FROM STRING_SPLIT(@RelatedDocIDs, ',')
+)
+```
+
+⚠️ Repeat until no new RelatedDocs found (max 3 levels).
+
+---
+
+### **Phase 3: RULE CHECKLIST VERIFICATION**
+Before execution, AI MUST:
+
+| Step | Action | Required Output |
+|------|--------|-----------------|
+| 3.1 | Extract ALL rules from loaded docs | Numbered rule list |
+| 3.2 | Map each proposed action to rules | Action → Rule mapping |
+| 3.3 | Identify UNMATCHED rules | Rules not yet applied |
+| 3.4 | Identify CONFLICTS | Proposed action vs Rule |
+| 3.5 | Show verification table to user | ✅/❌/⏭ status |
+
+---
+
+### **📋 Required Verification Output Format**
+
+Before ANY development execution, display:
+
+```
+📜 RULE VERIFICATION BEFORE EXECUTION:
+
+| # | Rule (from DocID) | Status | Conflict? |
+|---|-------------------|--------|-----------|
+| 1 | [Rule description] (DocID X) | ✅ Applied | None |
+| 2 | [Rule description] (DocID Y) | ✅ Applied | None |
+| 3 | [Rule description] (DocID Z) | ⏭ N/A | None |
+| 4 | [Rule description] (DocID W) | ❌ Missing | [Describe] |
+
+Status Legend: ✅ Applied | ❌ Missing/Violated | ⏭ Not Applicable
+```
+
+---
+
+### **🛑 Enforcement**
+
+| Condition | Action |
+|-----------|--------|
+| Phase 1 returns 0 docs | ⚠️ Warn user: "No docs found - proceeding with caution" |
+| Phase 3 finds CONFLICT | 🛑 STOP - Ask user before proceeding |
+| Phase 3 finds MISSING rule | 🛑 STOP - Apply missing rule or ask user |
+| All rules verified | ✅ Proceed with execution |
+
+### **🚫 Violations**
+AI is NOT allowed to:
+- Skip any phase
+- Execute without showing verification table
+- Proceed if conflicts exist (without user approval)
+- Say "I checked" without showing the actual checklist
+
+### **✅ Self-Check**
+Before every development/customization response, AI asks:
+**"Did I complete all 3 phases and show the verification table?"**
+
+⚠️ Penalty: Executing without 3-Phase verification = **INCORRECT behavior**
+User can say **"Show rule verification"** to enforce.
+
+---
+
 
 ***
 
