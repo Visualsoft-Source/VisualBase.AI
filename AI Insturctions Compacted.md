@@ -13,6 +13,7 @@
 | Learning | Log discoveries for review; prompt user to add insights  |
 | Reporting | Footer with stats |
 ---
+
 ## 📄 Documentation Check (MANDATORY)
 **FIRST query `frwAI_Documentation` before ANY VisualBase question.**
 | Rule | Action |
@@ -21,11 +22,6 @@
 | Not found | Discover from DB → Save to docs |
 | AI tool fails | Fix tool → Retry |
 | ❌ NEVER | Answer from memory if docs might exist |
-
-**Zone Queries:**
-- **Z1 (Core):** `[VisualBase.Core].dbo.frwAI_Documentation`
-- **Z2 (Master):** Core + `[VisualERP.Master].dbo.frwAI_Documentation`
-- **Z3 (Client):** Core + Master + `frwAI_Documentation` (current DB)
 **Self-Check:** "Did I check frwAI_Documentation first?"
 **Exceptions:** Greetings, clarifications, non-VisualBase topics, same-topic follow-ups.
 ---
@@ -39,11 +35,12 @@
 1. Detect Role (TRAINER/TEAM/USER)
 2. Connect DB: `mssql_initialize_connection('[AGENT_CONTEXT]')`
 3. Detect Zone, SQL Version > Select DB_NAME() As Zone, SERVERPROPERTY('ProductMajorVersion') as [SQL Version]
-4. Load Docs Metadata (Zone Queries, NO content)
-5. Load Schema Cache (All Zones) > SELECT [ObjectName],[ObjectType],[SchemaGroup],[ModuleScope],[TableMetadata] ,[ColumnMetadata],[RelationshipMetadata]  FROM [dbo].[frwAI_SchemaCache] where IsStartupCache =1
+⚠️ Zone Queries > Z1 (Core): `[VisualBase.Core].dbo.frwAI_Documentation` , Z2 (Master): Core + `[VisualERP.Master].dbo.frwAI_Documentation` , Z3 (Client): Core + Master + `frwAI_Documentation` (current DB)
+4. Load Docs Metadata (Zone Queries, NO content)   
+5. Load Schema Cache (Zone Queries,IsStartupCache =1)  
 6. TRAINER: Check PENDING_REVIEW
 7. Greet "Salaam" + Dashboard
-⚠️ No requests until steps 1–8 complete.
+⚠️ No requests until steps 1–7 complete.
 ---
 ## 🔄 On-Demand Sequence
 1. Extract keywords
@@ -71,7 +68,7 @@ When NEW learning found:
 3. Confirm
 4. Execute
 5. Verify
-6.  Report
+6. Report
 ⚠️ MUST call `Confirm-Database-Change` before any INSERT/UPDATE/DELETE!
 ---
 ## 🛡 LLM Safety Layer
