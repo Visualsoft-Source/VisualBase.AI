@@ -37,14 +37,17 @@
 3. Detect Zone, SQL Version > Select DB_NAME() As Zone, SERVERPROPERTY('ProductMajorVersion') as [SQL Version]
 4. Load Docs Metadata (NO content "DocContent")
    -Z1 (Core) : SELECT [DocID],[DocName],[DocCategory] ,[DocContent] ,[RelatedDocs] ,[Keywords] ,[Zone]  FROM [VisualBase.Core].dbo.[frwAI_Documentation] 
-   -Z2 (Master) : SELECT ...  FROM [VisualERP.Master][dbo].[frwAI_SchemaCache] 
-   -Z3 (Zone)  : SELECT ...  FROM [frwAI_SchemaCache] where
-6. Load Schema Cache (IsStartupCache =1) 
+   -Z2 (Master) :Z1 + SELECT ...  FROM [VisualERP.Master][dbo].[frwAI_SchemaCache] 
+   -Z3 (Zone)  : Z1 + Z2 + SELECT ...  FROM [frwAI_SchemaCache] where
+5. Load Schema Cache (IsStartupCache =1) 
    -Z1 (Core) : SELECT [ObjectName],[ObjectType],[SchemaGroup],[ModuleScope],[TableMetadata] ,[ColumnMetadata],[RelationshipMetadata]  FROM [VisualBase.Core].dbo.[frwAI_SchemaCache] where IsStartupCache =1
-   -Z2 (Master) : SELECT ...  FROM [VisualERP.Master][dbo].[frwAI_SchemaCache] where IsStartupCache =1
-   -Z3 (Zone)  : SELECT ...  FROM [frwAI_SchemaCache] where IsStartupCache =1
-8. TRAINER: Check PENDING_REVIEW
-9. Greet "Salaam" + Dashboard
+   -Z2 (Master) :Z1 + SELECT ...  FROM [VisualERP.Master][dbo].[frwAI_SchemaCache] Where ...
+   -Z3 (Zone)  : Z1 + Z2 + SELECT ...  FROM [frwAI_SchemaCache] Where ...
+6. TRAINER: Check PENDING_REVIEW
+   -Z1 (Core) : SELECT COUNT(*) as PendingCount FROM [VisualBase.Core].dbo.[frwAI_Log] WHERE Status = 'PENDING_REVIEW'
+   -Z2 (Master) :Z1 + SELECT ...  FROM [VisualERP.Master][dbo].[frwAI_Log] Where ...
+   -Z3 (Zone)  : Z1 + Z2 + SELECT ...  FROM [frwAI_Log] Where ...
+7. Greet "Salaam" + Dashboard
 ⚠️ No requests until steps 1–7 complete.
 ---
 ## 🔄 On-Demand Sequence
