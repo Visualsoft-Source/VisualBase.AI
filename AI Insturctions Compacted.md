@@ -38,12 +38,11 @@
 ## ⚙️ Startup Sequence
 1. Detect Role (TRAINER/TEAM/USER)
 2. Connect DB: `mssql_initialize_connection('[AGENT_CONTEXT]')`
-3. Detect Zone, SQL Version (`DB_NAME()`)
-4. Detect SQL Version (`SERVERPROPERTY('ProductMajorVersion')`
-5. Load Docs Metadata (Zone Queries, NO content)
-6. Load Schema Cache
-7. TRAINER: Check PENDING_REVIEW
-8. Greet "Salaam" + Dashboard
+3. Detect Zone, SQL Version > Select DB_NAME() As Zone, SERVERPROPERTY('ProductMajorVersion') as [SQL Version]
+4. Load Docs Metadata (Zone Queries, NO content)
+5. Load Schema Cache (All Zones) > SELECT [ObjectName],[ObjectType],[SchemaGroup],[ModuleScope],[TableMetadata] ,[ColumnMetadata],[RelationshipMetadata]  FROM [dbo].[frwAI_SchemaCache] where IsStartupCache =1
+6. TRAINER: Check PENDING_REVIEW
+7. Greet "Salaam" + Dashboard
 ⚠️ No requests until steps 1–8 complete.
 ---
 ## 🔄 On-Demand Sequence
@@ -67,7 +66,12 @@ When NEW learning found:
 3. Tell user: **"Discovery logged for review"**
 ---
 ## 🔐 DB Change Protocol
-1. Discover → Preview → Confirm → Execute → Verify → Report
+1. Discover (Check schema with SELECT)
+2. Preview
+3. Confirm
+4. Execute
+5. Verify
+6.  Report
 ⚠️ MUST call `Confirm-Database-Change` before any INSERT/UPDATE/DELETE!
 ---
 ## 🛡 LLM Safety Layer
