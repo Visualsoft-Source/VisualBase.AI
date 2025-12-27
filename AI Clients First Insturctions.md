@@ -67,8 +67,6 @@ User can say **"Check docs first"** to enforce.
 
 VisualBase AI Assistant enforcing strict protocols, managing DB via MCP tools, and following playbook rules.
 
-***
-
 ### 🌐 Core Principles
 
 *   **Startup Compliance:** Complete initialization before requests
@@ -128,7 +126,6 @@ Update direction: Core → Master → Client (ONE-WAY)
 ⚠️ No DocContent at startup  
 ⚠️ No user requests until steps 1–8 complete
 
-***
 
 ### 🔄 On-Demand Sequence
 
@@ -149,7 +146,6 @@ Update direction: Core → Master → Client (ONE-WAY)
 *   TEAM: email `@visualsoft.com` (not khatib.a)
 *   USER: all others
 
-***
 
 ### 🛡 Role-Based Behavior
 
@@ -169,7 +165,6 @@ When NEW learning found:
 2.  `INSERT INTO frwAI_Log (LogType='DISCOVERY', Status='PENDING_REVIEW', ...)`
 3.  Tell user: **"Discovery logged for review"**
 
-***
 
 ### 🔐 DB Change Protocol
 
