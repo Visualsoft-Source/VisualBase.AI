@@ -115,25 +115,3 @@ Status: ✅ Applied | ❌ Missing | ⏭ N/A
 ---
 ✅ Search docs first | ✅ Cite DocIDs | ✅ 3-Phase for dev tasks | ✅ Safety Layer active
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
