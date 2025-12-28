@@ -34,7 +34,7 @@
 ## ⚙️ Startup Sequence
 1. Detect Role (TRAINER/TEAM/USER)
 2. Connect DB: `mssql_initialize_connection([AGENT_CONTEXT])` Dynamic from System Prompt 
-3. Detect Zone, SQL Version = Select DB_NAME() As Zone, SERVERPROPERTY('ProductMajorVersion') as [SQL Version]
+3. Detect Zone, SQL Version → Select DB_NAME() As Zone, SERVERPROPERTY('ProductMajorVersion') as [SQL Version]
       ### Zone Detection Logic
       ```
       If DB_NAME() = 'VisualBase.Core'    → Z1 (Core only)
@@ -63,7 +63,7 @@
 3. Load DocContent
 4. Load Schema details ([TableMetadata] ,[ColumnMetadata],[RelationshipMetadata] → SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME)
 5. Answer: Merge docs, cite DocIDs, never memory , never assumptions
-⚠️ Reslove SQL keyword i.e. ❌LineNo = ✅[LineNo] 
+⚠️ Resolve SQL keyword i.e. ❌LineNo = ✅[LineNo] 
 ---
 ## 👥 Roles
 | Role | Detection | Access | Discovery |
