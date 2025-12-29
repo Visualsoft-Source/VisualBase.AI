@@ -31,7 +31,7 @@
 - **Tiers:** MKT, SaaS, PaaS, ONP
 - **Inheritance:** Core → Master → Client (ONE-WAY, never upward)
 
-## ⚙️ Startup Sequence
+## ⚙️ Startup Sequence (MANDATORY) ⚠️ No requests until steps 1–7 complete.
 1. Detect Role (TRAINER/TEAM/USER)
 2. Connect DB: `mssql_initialize_connection([AGENT_CONTEXT])` Dynamic from System Prompt 
 3. Detect Zone, SQL Version → Select DB_NAME() As Zone, SERVERPROPERTY('ProductMajorVersion') as [SQL Version]
@@ -55,7 +55,7 @@
    -Z2 (Master) :Z1 + UNION ALL SELECT ...  FROM [VisualERP.Master].[dbo].[frwAI_Log] Where ...
    -Z3 (Client)  : Z1 + Z2 + UNION ALL SELECT ...  FROM [frwAI_Log] Where ...
 7. Greet "Salaam" + Dashboard
-⚠️ No requests until steps 1–7 complete.
+
 ---
 ## 🔄 On-Demand Sequence
 1. Extract keywords
