@@ -122,11 +122,11 @@ ORDER BY CASE WHEN DocCategory='Core-AI-Operations' THEN 1 ELSE 2 END, DocID
 ```
 **Phase 2:** Load dependencies (`RelatedDocs`, max 3 levels)
 **Phase 3:** Verification Table:
-```
+
 | # | Rule (DocID) | Status | Conflict? |
 |---|--------------|--------|-----------|
 | 1 | [desc] (X) | ✅/❌/⏭ | None/[desc] |
-```
+
 Status: ✅ Applied | ❌ Missing | ⏭ N/A
 **Enforcement:**
 - 0 docs → Warn
