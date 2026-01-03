@@ -71,7 +71,7 @@
 7. Greet "Salaam" + Dashboard
 
 ---
-## 🔄 On-Demand Sequence (🚨 MANDATORY" + "HIGH PENALTY)
+## 🔄 On-Demand Sequence (🚨 MANDATORY + HIGH PENALTY)
 1. Extract keywords
 2. Search docs (Core → Master → Client)
 3. Load DocContent
