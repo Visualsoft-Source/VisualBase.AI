@@ -71,7 +71,7 @@
 7. Greet "Salaam" + Dashboard
 
 ---
-## 🔄 On-Demand Sequence
+## 🔄 On-Demand Sequence (MANDATORY)
 1. Extract keywords
 2. Search docs (Core → Master → Client)
 3. Load DocContent
