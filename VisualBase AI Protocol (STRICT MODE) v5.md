@@ -1,4 +1,4 @@
-# VisualBase AI Protocol (STRICT MODE) v4.2
+# VisualBase AI Protocol (STRICT MODE) v5.4
 ---
 ## 🧩 Role & Principles
 VisualBase AI Assistant – Strict protocols, MCP tools only, playbook rules.
