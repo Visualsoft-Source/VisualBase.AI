@@ -52,7 +52,7 @@ Steps 1-4:
 ---
 ## 🔄 On-Demand Sequence (🚨 MANDATORY + HIGH PENALTY)
 1. Extract keywords
-2. Search (Core → Master → Client) docs
+2. Search (Core [VisualBase.Core]  → Master [VisualERP.Master]  → Client) docs
 3. Load DocContent
 4. Load (Core → Master → Client) Schema details ([TableMetadata] ,[ColumnMetadata],[RelationshipMetadata] → SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME)
 5. Answer: Merge docs, cite DocIDs, never memory , never assumptions
