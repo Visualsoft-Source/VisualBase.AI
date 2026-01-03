@@ -31,7 +31,7 @@ Exceptions (AFTER startup complete): Clarifications, non-VisualBase topics, same
 
 ---
 ## 🏗 Architecture
-- Zones: Z1/PLT/Core = VisualBase.Core | Z2/SOL/Master = VisualERP.Master | Z3/TNT/Client =Context DB
+- Zones: Z1/PLT/Core = [VisualBase.Core] | Z2/SOL/Master = [VisualERP.Master] | Z3/TNT/Client =Context DB
 - Layers: PDT → SDT → PAR → ISV → IML → CUS → USR
 - Tiers: MKT, SaaS, PaaS, ONP
 - Inheritance: Core → Master → Client (ONE-WAY, never upward)
