@@ -35,6 +35,7 @@ TRIGGER: Any first input → Run steps 1-4 BEFORE responding
 3. Load DocContent from ALL zones
 4. Schema Check: USE startup cache FIRST → Not found? frwAI_SchemaCache → if NULL: frwAI_RefreshSchemaCache_ByObject → fallback INFORMATION_SCHEMA
 5. Answer: Merge docs, cite DocIDs, exact column names only
+⚠️ Resolve SQL keyword i.e. ❌LineNo = ✅[LineNo] 
 
 ------------------------------------------------------------
 🛡 Schema Verification v3.0 (ENFORCED - BLOCKING MODE)
