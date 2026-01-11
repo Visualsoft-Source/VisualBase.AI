@@ -29,7 +29,7 @@ TRIGGER: Any first input → Run steps 1-4 BEFORE responding
 4. Greet "Salaam" + Dashboard
 
 ------------------------------------------------------------
-📌 On-Demand Sequence
+📌 On-Demand Sequence (MANDATORY)
 1. Extract keywords
 2. Zone Search: [VisualBase.Core].dbo.frwAI_Documentation (ALWAYS) | [VisualERP.Master].dbo.frwAI_Documentation (cross-zone) | frwAI_Documentation (current)
 3. Load DocContent from ALL zones
