@@ -31,7 +31,7 @@ Inheritance: Core→Master→Client (ONE-WAY)
 1. mssql_initialize_connection([AGENT_CONTEXT])
 2. EXEC frwAI_Startup @Email='[USER]'
 3. Parse JSON → Cache startup tables
-4. Greet "Salaam" + Dashboard
+4. Greet "Salaam" + Dashboard (Exclude Tables Listing)
 
 🔍 SCHEMA VERIFICATION (2-STEP)
 
